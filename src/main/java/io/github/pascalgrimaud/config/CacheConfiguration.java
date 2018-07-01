@@ -38,6 +38,12 @@ public class CacheConfiguration {
             cm.createCache(io.github.pascalgrimaud.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(io.github.pascalgrimaud.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(io.github.pascalgrimaud.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(io.github.pascalgrimaud.domain.BankAccount.class.getName(), jcacheConfiguration);
+            cm.createCache(io.github.pascalgrimaud.domain.BankAccount.class.getName() + ".operations", jcacheConfiguration);
+            cm.createCache(io.github.pascalgrimaud.domain.Label.class.getName(), jcacheConfiguration);
+            cm.createCache(io.github.pascalgrimaud.domain.Label.class.getName() + ".operations", jcacheConfiguration);
+            cm.createCache(io.github.pascalgrimaud.domain.Operation.class.getName(), jcacheConfiguration);
+            cm.createCache(io.github.pascalgrimaud.domain.Operation.class.getName() + ".labels", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
