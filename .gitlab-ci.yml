@@ -46,7 +46,7 @@ maven-package:
         paths:
             - target/*.war
         # expire_in: 90 day
-maven-sonar
+maven-sonar:
     stage: deploy
     script:
         - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
