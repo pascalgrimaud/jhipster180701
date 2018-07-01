@@ -9,7 +9,6 @@ stages:
     - build
     - test
     - package
-    - deploy
 
 before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
@@ -42,11 +41,8 @@ maven-package:
     stage: package
     script:
         - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
     artifacts:
         paths:
             - target/*.war
         # expire_in: 90 day
-maven-sonar:
-    stage: deploy
-    script:
-        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
