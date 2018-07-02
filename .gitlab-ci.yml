@@ -1,4 +1,4 @@
-image: openjdk:8
+image: jhipster/jhipster:latest
 
 cache:
     key: "$CI_COMMIT_REF_NAME"
@@ -11,8 +11,8 @@ stages:
     - package
 
 before_script:
+    - 
     - export MAVEN_USER_HOME=`pwd`/.maven
-    - chmod +x mvnw
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v8.11.3 -DyarnVersion=v1.6.0 -Dmaven.repo.local=$MAVEN_USER_HOME
     - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dmaven.repo.local=$MAVEN_USER_HOME
 
@@ -41,7 +41,7 @@ maven-package:
     stage: package
     script:
         - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/*.war
