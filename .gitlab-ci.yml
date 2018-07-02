@@ -1,4 +1,4 @@
-image: jhipster/jhipster:latest
+image: openjdk:8
 
 cache:
     key: "$CI_COMMIT_REF_NAME"
@@ -12,23 +12,43 @@ stages:
 
 before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
+    - chmod +x mvnw
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v8.11.3 -DyarnVersion=v1.6.0 -Dmaven.repo.local=$MAVEN_USER_HOME
     - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dmaven.repo.local=$MAVEN_USER_HOME
 
 maven-build:
     stage: build
-    script: ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
+    script:
+        - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
 
 maven-test:
     stage: test
     script:
         - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+        - ls -al target/
     artifacts:
         paths:
             - target/surefire-reports/*
-            - target/test-results/jest/*
         # Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
+        # expire_in: 90 day
+maven-front-test:
+    stage: test
+    script:
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ls -al target/
+    artifacts:
+        paths:
+            - target/test-results/jest/*
+        # expire_in: 90 day
+maven-package:
+    stage: package
+    script:
+        - ls -al target/
+        - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ls -al target/
+        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ls -al target/
+    artifacts:
+        paths:
+            - target/*.war
         # expire_in: 90 day
