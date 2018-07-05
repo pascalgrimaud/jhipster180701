@@ -16,6 +16,9 @@ stages:
 
 before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
+    - echo $CI_PROJECT_DIR
+    - ls -al $CI_PROJECT_DIR
+    - ls -al /home/jhipster/app/
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v8.11.3 -DyarnVersion=v1.6.0 -Dmaven.repo.local=$MAVEN_USER_HOME
     - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dmaven.repo.local=$MAVEN_USER_HOME
 
