@@ -7,7 +7,7 @@ cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
         - node_modules
-        - .maven
+        - /home/jhipster/.m2
 stages:
     - build
     - test
@@ -15,7 +15,7 @@ stages:
     - deploy
 
 before_script:
-    - export MAVEN_USER_HOME=`pwd`/.maven
+    - export MAVEN_USER_HOME=/home/jhipster/.m2
     - echo $CI_PROJECT_DIR
     - ls -al $CI_PROJECT_DIR
     - ls -al /home/jhipster/app/
