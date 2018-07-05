@@ -1,5 +1,8 @@
 image: jhipster/jhipster:v5.0.1
 
+variables:
+    CI_PROJECT_DIR: /home/jhipster/app
+
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
