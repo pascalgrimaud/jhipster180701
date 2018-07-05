@@ -9,6 +9,7 @@ stages:
     - build
     - test
     - package
+    - deploy
 
 before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
@@ -45,3 +46,7 @@ maven-package:
         paths:
             - target/*.war
         # expire_in: 90 day
+maven-heroku:
+    stage: deploy
+    script:
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=jhipster-180701 -Dmaven.repo.local=$MAVEN_USER_HOME
