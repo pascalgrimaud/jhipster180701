@@ -4,12 +4,12 @@ cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
         - node_modules
-        - /home/jhipster/.m2
+        - .maven
 stages:
     - build
 
 before_script:
-    - export MAVEN_USER_HOME=/home/jhipster/.m2
+    - export MAVEN_USER_HOME=`pwd`/.maven
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v8.11.3 -DyarnVersion=v1.6.0 -Dmaven.repo.local=$MAVEN_USER_HOME
     - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dmaven.repo.local=$MAVEN_USER_HOME
 
@@ -22,3 +22,8 @@ maven-build:
         - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=jhipster-180701 -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/*.war
+        # Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
+        # expire_in: 90 day
