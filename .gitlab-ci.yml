@@ -40,7 +40,13 @@ maven-front-test:
 maven-package:
     stage: package
     script:
+        - ls -al target/
+        - ls -al target/surefire-reports/
+        - ls -al target/test-results/jest/
         - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ls -al target/
+        - ls -al target/surefire-reports/
+        - ls -al target/test-results/jest/
         - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
