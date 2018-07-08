@@ -7,9 +7,6 @@ cache:
         - /home/jhipster/.m2
 stages:
     - build
-    - test
-    - package
-    - deploy
 
 before_script:
     - export MAVEN_USER_HOME=/home/jhipster/.m2
@@ -18,41 +15,10 @@ before_script:
 
 maven-build:
     stage: build
-    script: ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
-
-maven-test:
-    stage: test
     script:
+        - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
-    artifacts:
-        paths:
-            - target/surefire-reports/*
-        # Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
-        # expire_in: 90 day
-maven-front-test:
-    stage: test
-    script:
         - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
-    artifacts:
-        paths:
-            - target/test-results/jest/*
-        # expire_in: 90 day
-maven-package:
-    stage: package
-    script:
-        - ls -al target/
-        - ls -al target/surefire-reports/
-        - ls -al target/test-results/jest/
         - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ls -al target/
-        - ls -al target/surefire-reports/
-        - ls -al target/test-results/jest/
         - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
-    artifacts:
-        paths:
-            - target/*.war
-        # expire_in: 90 day
-maven-heroku:
-    stage: deploy
-    script:
         - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=jhipster-180701 -Dmaven.repo.local=$MAVEN_USER_HOME
