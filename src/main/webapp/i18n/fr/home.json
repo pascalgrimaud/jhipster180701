@@ -1,7 +1,7 @@
 {
     "home": {
         "title": "Bienvenue, Java Hipster !",
-        "subtitle": "Ceci est votre page d'accueil (08/07/2018 - 21:10)",
+        "subtitle": "Ceci est votre page d'accueil (12/07/2018 - 07:57)",
         "logged": {
             "message": "Vous êtes connecté en tant que \"{{username}}\"."
         },
