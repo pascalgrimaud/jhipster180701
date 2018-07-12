@@ -8,6 +8,9 @@ stages:
     - build
 
 before_script:
+    - pwd
+    - ls -al
+    - ls -al node_module/
     - export MAVEN_USER_HOME=`pwd`/.maven
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v8.11.3 -DyarnVersion=v1.6.0 -Dmaven.repo.local=$MAVEN_USER_HOME
     - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dmaven.repo.local=$MAVEN_USER_HOME
@@ -15,6 +18,9 @@ before_script:
 maven-build:
     stage: build
     script:
+        - pwd
+        - ls -al
+        - ls -al node_module/
         - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
