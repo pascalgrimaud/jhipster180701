@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { BankAccountMySuffix } from 'app/shared/model/test-root/bank-account-my-suffix.model';
 import { BankAccountMySuffixService } from './bank-account-my-suffix.service';
 import { BankAccountMySuffixComponent } from './bank-account-my-suffix.component';
@@ -18,9 +19,9 @@ export class BankAccountMySuffixResolve implements Resolve<IBankAccountMySuffix>
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id).map((bankAccount: HttpResponse<BankAccountMySuffix>) => bankAccount.body);
+            return this.service.find(id).pipe(map((bankAccount: HttpResponse<BankAccountMySuffix>) => bankAccount.body));
         }
-        return Observable.of(new BankAccountMySuffix());
+        return of(new BankAccountMySuffix());
     }
 }
 

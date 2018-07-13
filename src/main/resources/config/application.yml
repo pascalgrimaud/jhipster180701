@@ -88,7 +88,7 @@ jhipster:
     mail:
         from: jhipster180701@localhost
     swagger:
-        default-include-pattern: /api/.*
+        default-include-pattern: /(api|management)/.*
         title: jhipster180701 API
         description: jhipster180701 API documentation
         version: 0.0.1
