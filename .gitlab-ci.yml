@@ -1,4 +1,4 @@
-image: jhipster/jhipster:v5.0.2
+image: jhipster/jhipster:v5.1.0
 
 cache:
     key: "$CI_COMMIT_REF_NAME"
@@ -26,7 +26,6 @@ maven-build:
         - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=jhipster-180701 -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/*.war
