@@ -8,9 +8,6 @@ stages:
     - build
 
 before_script:
-    - pwd
-    - ls -al
-    - ls -al node_modules/ 2>/dev/null || true
     - export MAVEN_USER_HOME=`pwd`/.maven
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v8.11.3 -DyarnVersion=v1.6.0 -Dmaven.repo.local=$MAVEN_USER_HOME
     - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dmaven.repo.local=$MAVEN_USER_HOME
@@ -18,14 +15,12 @@ before_script:
 maven-build:
     stage: build
     script:
-        - pwd
-        - ls -al
-        - ls -al node_modules/ 2>/dev/null || true
         - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=pascalgrimaud-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=jhipster-180701 -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/*.war
